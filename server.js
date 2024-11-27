@@ -54,7 +54,7 @@ app.get('/api/question/random', async (req, res) => {
 // const apiKey = 'sk-OqemR8KRPQPzuw2V28Mo-MUivgwbmm_j9Qt4oF787ST3BlbkFJeS8H9aLvWGoKCtQDXgDAoZe8Kk1Aafl5Zz9TgQdtAA';
 // const apiKey = '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';
 // const apiKey = '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'
-  const apiKey = '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'
+  const apiKey = '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'
 // Validate ChatGPT response API
 app.post('/api/validate', async (req, res) => {
   const { question, expectedAnswer } = req.body;
