@@ -119,7 +119,7 @@
                  <script>
     document.getElementById('fetchQuestion').addEventListener('click', async () => {
         try {
-            const questionResponse = await fetch('/api/question/random');
+            const questionResponse = await fetch('http://localhost:3000/api/question/random');
             const questionData = await questionResponse.json();
             if (questionData.success) {
                 const question = questionData.question;
@@ -129,7 +129,7 @@
                     <p><strong>ChatGPT Response:</strong> <span id="chatGPTResponse">Loading...</span></p>
                     <p><strong>Validation Result:</strong> <span id="validationResult">Validating...</span></p>
                 `;
-                const validateResponse = await fetch('/api/validate', {
+                const validateResponse = await fetch('http://localhost:3000/api/validate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ question: question.question, expectedAnswer: question.expectedAnswer }),
@@ -152,7 +152,7 @@
 
     document.getElementById('fetchStats').addEventListener('click', async () => {
         try {
-            const statsResponse = await fetch('/api/statistics');
+            const statsResponse = await fetch('http://localhost:3000/api/statistics');
             const statsData = await statsResponse.json();
             if (statsData.success) {
                 const statsHtml = statsData.statistics.map(stat => `
@@ -181,7 +181,7 @@
 <script>
   document.getElementById('fetchStats').addEventListener('click', async () => {
       try {
-          const statsResponse = await fetch('/api/statistics');
+          const statsResponse = await fetch('http://localhost:3000/api/statistics');
           const statsData = await statsResponse.json();
 
           if (statsData.success) {
