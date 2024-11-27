@@ -76,4 +76,25 @@ app.post('/api/validate', async (req, res) => {
 });
 
 
+// Statistics API
+app.get('/api/statistics', async (req, res) => {
+  try {
+      const stats = await Question.aggregate([
+          {
+              $group: {
+                  _id: "$domain",
+                  averageResponseTime: { $avg: "$responseTime" },
+                  accuracyRate: { $avg: { $cond: [{ $eq: ["$isValid", true] }, 100, 0] } }
+              }
+          }
+      ]);
+      res.json({ success: true, statistics: stats });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, error: 'Error fetching statistics.' });
+  }
+});
+
+
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

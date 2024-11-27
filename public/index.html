@@ -10,6 +10,8 @@
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 
     
@@ -100,7 +102,7 @@
         
             
             <body>
-              <!-- Page content -->
+              
           
               <section id="question-fetch">
                   <button id="fetchQuestion">Fetch Question</button>
@@ -166,6 +168,75 @@
         }
     });
 </script>
+
+<section id="results">
+  <div class="chart-container">
+      <p>Accuracy Rates:</p>
+      <canvas id="accuracyChart"></canvas>
+      <p>Average Response Time:</p>
+      <canvas id="responseTimeChart"></canvas>
+  </div>
+</section>
+
+<script>
+  document.getElementById('fetchStats').addEventListener('click', async () => {
+      try {
+          const statsResponse = await fetch('/api/statistics');
+          const statsData = await statsResponse.json();
+
+          if (statsData.success) {
+              const labels = statsData.statistics.map(stat => stat._id);
+              const accuracyRates = statsData.statistics.map(stat => stat.accuracyRate);
+              const responseTimes = statsData.statistics.map(stat => stat.averageResponseTime);
+
+              // Update Accuracy Chart
+              const ctx1 = document.getElementById('accuracyChart').getContext('2d');
+              new Chart(ctx1, {
+                  type: 'bar',
+                  data: {
+                      labels: labels,
+                      datasets: [{
+                          label: 'Accuracy Rate (%)',
+                          data: accuracyRates,
+                          backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe'],
+                      }]
+                  },
+                  options: {
+                      scales: { y: { beginAtZero: true, max: 100 } }
+                  }
+              });
+
+              // Update Response Time Chart
+              const ctx2 = document.getElementById('responseTimeChart').getContext('2d');
+              new Chart(ctx2, {
+                  type: 'line',
+                  data: {
+                      labels: labels,
+                      datasets: [{
+                          label: 'Average Response Time (ms)',
+                          data: responseTimes,
+                          borderColor: '#4bc0c0',
+                          fill: false
+                      }]
+                  },
+                  options: {
+                      scales: { y: { beginAtZero: true } }
+                  }
+              });
+
+          } else {
+              document.getElementById('statsContainer').textContent = 'Error fetching statistics.';
+          }
+      } catch (error) {
+          console.error('Error:', error);
+          document.getElementById('statsContainer').textContent = 'Network error.';
+      }
+  });
+</script>
+
+</body>
+</html>
+
 
 
 
